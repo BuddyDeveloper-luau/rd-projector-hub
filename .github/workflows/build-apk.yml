@@ -17,10 +17,18 @@ jobs:
       - name: Setup SDK & Build APK
         run: |
           export ANDROID_HOME=/usr/local/lib/android/sdk
-          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses >/dev/null 2>&1 \vert{}\vert{} true$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
-          npm install && npx cap add android && npx cap sync android && node scripts/patch-projector.mjs
-          cd android && chmod +x gradlew && ./gradlew assembleDebug --no-daemon && cd ..
-          mkdir -p release-apk && cp android/app/build/outputs/apk/debug/app-debug.apk release-apk/RD-Stream-TV.apk
+          printf 'y\ny\ny\ny\ny\ny\ny\ny\n' | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses >/dev/null 2>&1
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+          npm install
+          npx cap add android
+          npx cap sync android
+          node scripts/patch-projector.mjs
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+          cd ..
+          mkdir -p release-apk
+          cp android/app/build/outputs/apk/debug/app-debug.apk release-apk/RD-Stream-TV.apk
       - uses: actions/upload-artifact@v4
         with: { name: RD-Stream-TV-APK, path: release-apk/RD-Stream-TV.apk }
       - uses: softprops/action-gh-release@v2
