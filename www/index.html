@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>RD Stream TV</title><link rel="stylesheet" href="styles.css"/></head><body>
+<header class="topbar">
+  <div class="brand"><div class="dot"></div><h1>RD STREAM TV</h1><span id="user-badge" class="badge">NOT CONNECTED</span></div>
+  <div class="player-select">
+    <span class="muted">TARGET PLAYER:</span>
+    <button class="chip active" data-pkg="org.videolan.vlc" tabindex="0">VLC</button>
+    <button class="chip" data-pkg="org.xbmc.kodi" tabindex="0">KODI</button>
+    <button class="chip" data-pkg="" tabindex="0">ASK</button>
+  </div>
+</header>
+<div id="status-bar" class="status-bar hidden"></div>
+<main class="layout">
+  <section class="card">
+    <span class="kicker">1. REAL-DEBRID API TOKEN</span>
+    <form id="token-form" class="row">
+      <input id="token-input" type="password" placeholder="Paste Real-Debrid API token (from real-debrid.com/apitoken)" tabindex="0"/>
+      <button type="submit" class="btn btn-primary" tabindex="0">Save & Sync</button>
+    </form>
+  </section>
+  <section class="card">
+    <span class="kicker">2. UNRESTRICT LINK OR ADD MAGNET</span>
+    <form id="link-form" class="row">
+      <input id="link-input" type="text" placeholder="Paste https://real-debrid.com/d/... or magnet:?xt=..." tabindex="0"/>
+      <button type="submit" class="btn btn-primary" tabindex="0">Play Now</button>
+    </form>
+  </section>
+  <section class="card full">
+    <div class="row-between">
+      <span class="kicker">3. YOUR REAL-DEBRID LIBRARY (CLICK TO LAUNCH IN VLC)</span>
+      <button id="refresh-btn" class="chip" tabindex="0">↻ Refresh List</button>
+    </div>
+    <div id="library-list" class="grid-list"></div>
+  </section>
+</main><script src="app.js"></script></body></html>

@@ -1,0 +1,30 @@
+﻿name: Build RD Projector APK
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - uses: actions/setup-java@v4
+        with: { distribution: 'temurin', java-version: '17' }
+      - name: Setup SDK & Build APK
+        run: |
+          export ANDROID_HOME=/usr/local/lib/android/sdk
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses >/dev/null 2>&1 \vert{}\vert{} true$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+          npm install && npx cap add android && npx cap sync android && node scripts/patch-projector.mjs
+          cd android && chmod +x gradlew && ./gradlew assembleDebug --no-daemon && cd ..
+          mkdir -p release-apk && cp android/app/build/outputs/apk/debug/app-debug.apk release-apk/RD-Stream-TV.apk
+      - uses: actions/upload-artifact@v4
+        with: { name: RD-Stream-TV-APK, path: release-apk/RD-Stream-TV.apk }
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.0
+          name: RD Stream TV v1.0.0 (Projector APK)
+          files: release-apk/RD-Stream-TV.apk
